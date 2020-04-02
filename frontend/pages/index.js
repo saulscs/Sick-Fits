@@ -5,7 +5,7 @@ import Link from 'next/link'
 const Home = props => (
     
     <div>
-        <h1>Hey</h1>
+        <p>Sell!</p>
     </div>
     
 )
