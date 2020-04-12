@@ -91,7 +91,7 @@ class CreateItem extends Component {
                 />
                 {this.state.image && (
                   <img width="200" src={this.state.image} alt="Upload Preview" />
-                )}∫
+                )}
               </label>
 
               <label htmlFor="title">
