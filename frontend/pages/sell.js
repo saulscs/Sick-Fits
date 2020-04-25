@@ -1,10 +1,13 @@
 
 import CreateItem from '../components/CreateItem'
+import PleaseSingIn from '../components/PleaseSignin'
 
 const Sell = props => (
     
     <div>
-        <CreateItem/>
+        <PleaseSingIn>
+            <CreateItem/>
+        </PleaseSingIn>
     </div>
     
 )
