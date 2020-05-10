@@ -39,7 +39,7 @@ const Mutations = {
             },
         }, info);
     },
-   async  deleteItem (parent, args, ctx,info){
+    async  deleteItem (parent, args, ctx,info){
         const where = {id: args.id}
         // 1.- Find the item
         const item =  await ctx.db.query.item({where}, `{id title user {id} }` );
@@ -123,48 +123,48 @@ const Mutations = {
         html: makeAniceEmail(`Your Password Reset Token is here!
         \n\n
         <a href="${process.env
-          .FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here to Reset</a>`),
-      });
+        .FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here to Reset</a>`),
+        });
         // 4.- Return the message
         return { message: 'thanks'}
     },
     async resetPassword(parent, args, ctx, info) {
         // 1. check if the passwords match
         if (args.password !== args.confirmPassword) {
-          throw new Error("Yo Passwords don't match!");
+            throw new Error("Yo Passwords don't match!");
         }
         // 2. check if its a legit reset token
         // 3. Check if its expired
         const [user] = await ctx.db.query.users({
-          where: {
+        where: {
             resetToken: args.resetToken,
             resetTokenExpiry_gte: Date.now() - 3600000,
-          },
+        },
         });
         if (!user) {
-          throw new Error('This token is either invalid or expired!');
+            throw new Error('This token is either invalid or expired!');
         }
         // 4. Hash their new password
         const password = await bcrypt.hash(args.password, 10);
         // 5. Save the new password to the user and remove old resetToken fields
         const updatedUser = await ctx.db.mutation.updateUser({
-          where: { email: user.email },
-          data: {
+        where: { email: user.email },
+        data: {
             password,
             resetToken: null,
             resetTokenExpiry: null,
-          },
+        },
         });
         // 6. Generate JWT
         const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
         // 7. Set the JWT cookie
         ctx.response.cookie('token', token, {
-          httpOnly: true,
+        httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 365,
         });
         // 8. return the new user
         return updatedUser;
-      },
+    },
     async updatePermissions (parent, args, ctx, info){
         // 1.- Check if the are logged in
         if(!ctx.request.userId) {
@@ -187,6 +187,39 @@ const Mutations = {
             },
             where: {
                 id: args.userId,
+            }
+        }, info)
+    },
+    async addToCart(parent, args, ctx, info){
+        // 1.- Meke sure they are signed in 
+        const {userId} = ctx.request
+        if(!userId){
+            throw new Error('Yoy must be signed in soon')
+        }
+        // 2.- Query the users current cart
+        const [existingCartItem] = await ctx.db.query.cartItems({
+            where: {
+                user: {id: userId},
+                item: {id: args.id}
+            }
+        })
+        // 3.- Check if that item is already in their cart and increment by 1 if it is
+        if(existingCartItem){
+            console.log('This item is already in your cart')
+            return ctx.db.mutation.updateCartItem({
+                where: { id: existingCartItem.id },
+                data: {quantity: existingCartItem.quantity + 1}
+            }, info )
+        }
+        // 4.- If its not , create a fresh cartItem for that user!
+        return ctx.db.mutation.createCartItem({
+            data: {
+                user: {
+                    connect: {id: userId},
+                },  
+                item: {
+                    connect: {id: args.id}
+                }
             }
         }, info)
     }
