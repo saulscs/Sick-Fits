@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag'
 import {CURRENT_USER_QUERY} from './User'
+import CartItem from './CartItem';
 
 const REMOVE_FROM_CART_MUTATION = gql  `
     mutation removeFromCart($id: ID!){
@@ -27,8 +28,33 @@ class RemoveFromCart extends React.Component{
     static propTypes = {
         id: PropTypes.string.isRequired,
       };
+    // This gets called as soon we get a response back from 
+    // the server after a mutation has been performed
+    update = (cache, payload) => {
+        console.log('Runing remove from cart update')
+        // 1.- First read the cache
+         const data = cache.readQuery({query: CURRENT_USER_QUERY });
+         console.log(data)
+        // 2.-  Remove that item from the cart
+        const cartItemId = payload.data.removeFromCart.id;
+        data.me.cart = data.me.cart.filter(cartItem => cartItem.id !== cartItemId)
+        // 3.- Write it back the cache
+        cache.writeQuery({query:CURRENT_USER_QUERY, data })
+    }
     render(){
-        return <Mutation mutation={REMOVE_FROM_CART_MUTATION} variables={{id:this.props.id}}>
+        return ( 
+        <Mutation 
+            mutation={REMOVE_FROM_CART_MUTATION} 
+            variables={{id:this.props.id}} 
+            update={this.update}
+            optimisticResponse={{
+                __typename: 'Mutation',
+                removeFromCart:{
+                    __typename: 'CartItem',
+                    id: this.props.id,
+                }
+            }}
+            >
             {(removeFromCart, {loading,error}) => (
                 <BigButton 
                 disabled={loading}
@@ -39,7 +65,8 @@ class RemoveFromCart extends React.Component{
                 &times;
                 </BigButton>
             )}
-        </Mutation>  
+        </Mutation>
+        )
     }
 }
 

@@ -233,7 +233,7 @@ const Mutations = {
         //1.5 - Make sure we found an item
         if (!cartItem) throw new Error('No CartItem Found!')
         //2.- Make sure they own that cart item
-        if(cartItem.userId !== ctx.request.userId){
+        if(cartItem.user.id !== ctx.request.userId){
             throw new Error('cheatin huhhhh')
         }
         //3.- Delete that cart item
