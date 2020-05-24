@@ -10,19 +10,45 @@ import Error from './ErrorMessage'
 import User, {CURRENT_USER_QUERY} from './User'
 import CartItem from './CartItem'
 
+const CRETE_ORDER_MUTATION = gql `
+    mutation createOrder($token: String!){
+        createOrder(token: $token){
+            id
+            charge
+            total
+            items {
+                id
+                title
+            }
+        }
+    }
+`
+
 function totalItems (cart){
     return cart.reduce((tally, cartItem) => tally + cartItem.quantity,0)
 }
 
 class TakeMyMoney extends React.Component{
-    onToken = (res) => {
+    onToken = (res,createOrder) => {
         console.log('On token call')
         console.log(res.id)
-    }
+        //manually call the mutation once we have the stripe token
+        createOrder({
+            variables: {
+                token: res.id,
+            },
+        }).catch(err => {
+            alert(err.message);
+        });
+    };
     render(){
         return(
             <User>
                 {({data: {me}})=> ( 
+                    <Mutation 
+                        mutation={CRETE_ORDER_MUTATION}
+                        refetchQueries={[{query: CURRENT_USER_QUERY }]}>
+                        {(createOrder)=> (
                 <StripeCheckout 
                     amount={calcTotalPrice(me.cart)}
                     name="Sick Fits"
@@ -31,9 +57,12 @@ class TakeMyMoney extends React.Component{
                     stripeKey="pk_test_dgF57Ua1XISsndAu0cysMOa500wZd5kHnZ"
                     currency="USD"
                     email={me.email}
-                    token={res => this.onToken(res)}>
+                    token={res => this.onToken(res,createOrder)}>
                     {this.props.children}
-                </StripeCheckout>)} 
+                </StripeCheckout>
+                 )}
+                 </Mutation>
+                )} 
             </User>
         )
     }
