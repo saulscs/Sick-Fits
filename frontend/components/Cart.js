@@ -47,13 +47,11 @@ const Cart = () => (
         <footer>
             {/* {(new Date().getFullYear())} */}
             <p>{formatMoney(cartTotalPrice(me.cart))}</p>
-            <TakeMyMoney>
-            <SickButton>Checkout</SickButton>
-            </TakeMyMoney>
-            <TakeMyMoney>
-                <p>dda</p>
-                <SickButton>Saul is cool</SickButton>
-            </TakeMyMoney>
+            {me.cart.length && (
+                <TakeMyMoney>
+                <SickButton>Checkout</SickButton>
+                </TakeMyMoney>
+            )}
         </footer>
         </CartStyles>
     )
