@@ -25,10 +25,21 @@ const Center = styled.div`
 `
 const ItemsList = styled.div `
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, 400px);
+    justify-content: center;
     grid-gap: 60px;
     max-width: ${props => props.theme.maxWidth};
     margin: 0 auto;
+
+    @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+    grid-template-columns: 1fr;
+    width: 320px;
+}
+
+    
 `
 
  class Items extends Component {

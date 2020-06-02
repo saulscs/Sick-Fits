@@ -21,6 +21,7 @@ const OrderItemStyles = styled.li`
       object-fit: cover;
       width: 100%;
     }
+
   }
   .order-meta {
     display: grid;
@@ -38,6 +39,10 @@ const OrderItemStyles = styled.li`
       margin-bottom: 1rem;
     }
   }
+
+  
+}
+
 `;
 
 export default OrderItemStyles;

@@ -30,6 +30,24 @@ const OrderUl = styled.ul`
   display: grid;
   grid-gap: 4rem;
   grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+
+  @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+    grid-template-columns: 1fr;
+    padding-inline-start: 0px;
+
+    .order-meta {
+      grid-template-columns: 1fr;
+    }
+
+    .images {
+      img{
+        object-fit:contain;
+      }
+    }
+}
 `;
 
 class OrderList extends React.Component {
