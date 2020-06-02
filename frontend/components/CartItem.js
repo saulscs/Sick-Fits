@@ -16,6 +16,12 @@ const CartItemStyles = styled.li `
     h3,p{
         margin: 0 ; 
     } 
+    @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+    grid-template-columns: 1fr;
+  }
 `
 
 const CartItem = ({cartItem}) => { 

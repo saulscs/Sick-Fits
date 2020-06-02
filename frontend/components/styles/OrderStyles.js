@@ -5,6 +5,10 @@ const OrderItemStyles = styled.li`
   list-style: none;
   padding: 2rem;
   border: 1px solid ${props => props.theme.offWhite};
+  span{
+    font-size: 14px;
+  }
+
   h2 {
     border-bottom: 2px solid red;
     margin-top: 0;
@@ -40,7 +44,12 @@ const OrderItemStyles = styled.li`
     }
   }
 
-  
+  .order-item{
+    img{
+      width: 100%;
+      object-fit: contain;
+    }
+  }
 }
 
 `;
