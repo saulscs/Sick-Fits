@@ -12,6 +12,7 @@ const fakeItem = {
 };
 
 describe('<Item/>', () => {
+    
   it('renders and matches the snapshot', () => {
     const wrapper = shallow(<ItemComponent item={fakeItem} />);
     expect(toJSON(wrapper)).toMatchSnapshot();
