@@ -53,7 +53,7 @@ class TakeMyMoney extends React.Component{
                     <Mutation 
                         mutation={CRETE_ORDER_MUTATION}
                         refetchQueries={[{query: CURRENT_USER_QUERY }]}>
-                        {(createOrder)=> (
+                {(createOrder)=> (
                 <StripeCheckout 
                     amount={calcTotalPrice(me.cart)}
                     name="Sick Fits"
