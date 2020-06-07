@@ -74,3 +74,4 @@ class TakeMyMoney extends React.Component{
 }
 
 export default TakeMyMoney;
+export {CRETE_ORDER_MUTATION};

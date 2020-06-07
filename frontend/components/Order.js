@@ -45,7 +45,7 @@ class Order extends React.Component {
                         if(loading) return <p>Loading ...</p>  
                         const order = data.order
                     return (
-                        <OrderStyles>
+                        <OrderStyles data-test="order">
                             <Head>
                             <title>Sick Fits - Order {order.id}</title>
                             </Head>
@@ -65,7 +65,7 @@ class Order extends React.Component {
                                 <span>Item Count :</span>
                                 <span>{order.items.length}</span>
                             </p>
-                            <div className="items">
+                            <div className="items" >
                                 {order.items.map(item => (
                                     <div className="order-item" key={item.id}>
                                         <img src={item.largeImage} alt={item.title}/>
@@ -88,3 +88,4 @@ class Order extends React.Component {
 }
 
 export default Order;
+export {SINGLE_ORDER_QUERY};
