@@ -35,4 +35,4 @@ User.proptypes = {
 }
 
 export default User;
-export {CURRENT_USER_QUERY}
+export {CURRENT_USER_QUERY};
